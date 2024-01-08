@@ -1,0 +1,37 @@
+﻿@using Microsoft.AspNetCore.SignalR.Client
+@using Microsoft.Extensions.Options
+@using TemplateBlazorWasmHostedNet8.Shared.CustomExceptions
+@using TemplateBlazorWasmHostedNet8.Shared.Models.OptionsPattern
+@attribute [Authorize]
+@code {
+
+    [Parameter]
+    public ISnackbar LocalSnackBar { get; set; }
+
+    [Parameter]
+    public AccountService accountService { get; set; }
+
+    [Parameter]
+    public NavigationManager navigationManager { get; set; }
+
+    public async Task ActionAsync(Func<Task> func, HubConnection? hubConnection = null)
+    {
+        try
+        {
+            await func();
+        }
+        catch (CustomNotAuthorizeJwtToken ex)
+        {
+            await accountService.LogOutUserAuthenticatedAsync(hubConnection);
+            LocalSnackBar.Add("Deslogado!", Severity.Error);
+            navigationManager.NavigateTo("/counter");
+        }
+        catch (OperationCanceledException)
+        {
+        }
+        catch (Exception ex)
+        {
+            LocalSnackBar.Add(ex.Message, Severity.Error);
+        }
+    }
+}

@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "7gb9P4oKUxLAq1/BRB6QYavFUu2nGPesGITDjdNOAcg=",
+  "Source": "TemplateBlazorWasmHostedNet8.Api",
+  "BasePath": "_content/TemplateBlazorWasmHostedNet8.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

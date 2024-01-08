@@ -1,0 +1,248 @@
+﻿@page "/"
+@using Microsoft.AspNetCore.SignalR.Client
+@using Microsoft.Extensions.Options
+@using TemplateBlazorWasmHostedNet8.Shared.CustomExceptions
+@using TemplateBlazorWasmHostedNet8.Shared.Extensions
+@using TemplateBlazorWasmHostedNet8.Shared.Models.OptionsPattern
+@inject AccountService accountService
+@inject NotificationsGenericHub notificationsGenericHub
+@inject IHttpClientFactory _httpClientFactory
+@inject ApiDogService _apiDogService
+@inject ILocalStorageService _localStorageService
+@inject IOptionsSnapshot<ConfigurationServiceOptions> _options
+@implements IAsyncDisposable
+
+<PageTitle>Home</PageTitle>
+
+<AuthorizeView>
+    <NotAuthorized>
+        <h1>Não autorizado</h1>
+    </NotAuthorized>
+    <Authorized>
+        <h1>@context.User.Identity.IsAuthenticated</h1>
+    </Authorized>
+</AuthorizeView>
+
+<MudDialog @bind-IsVisible="GlobalLoading" Options="dialogOptions" Class="d-flex justify-center">
+    <DialogContent>
+
+        @*<MudItem xs="12" sm="6">
+
+            <MudProgressCircular Color="Color.Secondary" Indeterminate="true" Size="Size.Small" />
+        </MudItem>
+        <MudItem xs="12" sm="6">
+
+            <MudText Typo="Typo.inherit" Class="mt-3">Carregando ...</MudText>
+        </MudItem> *@
+
+       @*  <div class="d-inline-flex mr-3">
+            <MudProgressCircular Color="Color.Secondary" Indeterminate="true" Size="Size.Small" />
+
+        </div>
+        <div class="d-inline-flex">
+            <MudText Typo="Typo.inherit">Carregando ...</MudText>
+        </div> *@
+
+        <MudText Typo="Typo.inherit"><strong>Carregando ...</strong></MudText>
+        <MudProgressLinear Color="Color.Primary" Style="width:200px;" Indeterminate="true" Class="my-2" Size="Size.Small" />
+        <MudButton OnClick="() => CancelGlobalCancelToken()" Color="Color.Default">Cancelar</MudButton>
+       
+    </DialogContent>
+</MudDialog>
+
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+@Token
+
+<h1>@TextFromDog?</h1>
+
+<br />
+<br />
+<h1>@TextFromDogBinary?</h1>
+
+<br />
+<br />
+@Result?.Username
+@Result?.Password
+
+@if (IsWebsocketOnline)
+{
+    <h1>@Datetime</h1>
+
+}
+
+@if (Dog is not null)
+{
+    <img src="@Dog?.message" width="100" height="100" />
+    @Dog?.status
+}
+
+@* @if (GlobalLoading)
+{
+    <MudCard>
+        <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="200px" />
+        <MudCardContent>
+            <MudSkeleton Width="30%" Height="42px;" />
+            <MudSkeleton Width="80%" />
+            <MudSkeleton Width="100%" />
+        </MudCardContent>
+        <MudCardActions>
+            <MudSkeleton Width="64px" Height="40px" Class="ml-2" />
+            <MudSkeleton Width="105px" Height="40px" Class="ml-3" />
+        </MudCardActions>
+    </MudCard>
+} *@
+
+
+
+<MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="@(() => GlobalSnackBar.Add("Simple Snackbar"))">
+    Open Snackbar
+</MudButton>
+
+<MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="@(() => View.ActionAsync(async () => {
+    await accountService.LogOutUserAuthenticatedAsync(HubConnection);
+    Token = null;
+    Dog = null;
+    TextFromDog = null;
+    TextFromDogBinary = null;
+    IsWebsocketOnline = false;
+    await InvokeAsync(StateHasChanged);
+
+}, HubConnection))">
+    Log Out
+</MudButton>
+
+<MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="@(() => View.ActionAsync(async () => {
+    IsWebsocketOnline = true;
+    await Do();
+}, HubConnection))">
+    Log In
+</MudButton>
+
+<MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="@(() => View.ActionAsync(() => GetDog(), HubConnection))">
+    Get Dog
+</MudButton>
+
+<MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="@(() => View.ActionAsync(() => PostBinaryFromDog(), HubConnection))">
+    Get Dog Binary
+</MudButton>
+
+@code {
+
+    [CascadingParameter]
+    public Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    public AuthenticationState? AuthenticationState { get; set; }
+
+    string? Token;
+    LoginDto? Result;
+    DateTime? Datetime;
+
+    HubConnection? HubConnection;
+    ComponentBaseModel View = new();
+    bool IsWebsocketOnline;
+    string? TextFromDog;
+    string? TextFromDogBinary;
+    DogDto? Dog;
+    bool GlobalLoading;
+    CancellationTokenSource? GlobalCancelToken;
+
+    DialogOptions dialogOptions = new() { FullWidth = false, NoHeader = true, DisableBackdropClick = true };
+
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        // try
+        // {
+        //     await notificationsGenericHub.NotifyHub_Dispose(HubConnection);
+        // }
+        // catch { }
+        await View.ActionAsync(() => notificationsGenericHub.NotifyHub_Dispose(HubConnection));
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        View.LocalSnackBar = GlobalSnackBar;
+        View.accountService = accountService;
+        View.navigationManager = GlobalNavigationManager;
+        await View.ActionAsync(async () =>
+        {
+            IsWebsocketOnline = true;
+            await Do();
+        }, HubConnection);
+    }
+
+    private async Task Do()
+    {
+        Token = await _localStorageService.GetItemAsStringAsync(EnumTokenService.TokenJWT.ToString());
+        if (string.IsNullOrEmpty(Token))
+        {
+            await accountService.LoginAsync("", "");
+        }
+
+        Token = await _localStorageService.GetItemAsStringAsync(EnumTokenService.TokenJWT.ToString());
+        //var uri = "https://localhost:7136/chat";
+        var uri = "https://api-blazor.appteste02.vps-kinghost.net/chat";
+        HubConnection = await notificationsGenericHub.NotifyHub_Init(HubConnection, uri, Token);
+
+        // Teste 01 - ApiSerivce
+        var dogg = await _apiDogService.GetOkFromDog();
+        TextFromDog = dogg.Data ?? $"{dogg.Error.Status} - {dogg.Error.Title}";
+        //
+
+        await foreach (var date in HubConnection.StreamAsync<DateTime>("Streaming"))
+        {
+            Datetime = date;
+            await InvokeAsync(StateHasChanged);
+        }       
+    }
+
+    private async Task GetDog()
+    {
+        GlobalLoading = true;
+
+        // Teste 01 - ApiSerivce
+        var dogg = await _apiDogService.GetOkFromDog();
+        TextFromDog = dogg.Data ?? $"{dogg.Error.Status} - {dogg.Error.Title}";
+        //
+
+        // Funciona 02
+        using var httpClient1 = _httpClientFactory.CreateClient();
+        httpClient1.BaseAddress = new Uri("https://Dog.ceo/api/breeds/image/random");
+        var response1 = await httpClient1.GetFromJsonAsync<DogDto>("");
+        Dog = response1;
+        if (response1 is null)
+        {
+            throw new Exception("Dog vazio!");
+        }
+
+        Dog = response1;
+
+        GlobalLoading = false;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task PostBinaryFromDog()
+    {
+        GlobalCancelToken = new();
+        GlobalLoading = true;
+
+        // Teste 01 - ApiSerivce
+        var loginn = await _apiDogService.PostBinaryFromDog(GlobalCancelToken.Token);
+        TextFromDogBinary = loginn.Data.Username ?? $"{loginn.Error.Status} - {loginn.Error.Title}";
+        //
+
+        GlobalLoading = false;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task CancelGlobalCancelToken()
+    {
+        await View.ActionAsync(async () =>
+        {
+            await GlobalCancelToken.CancelAsync();
+            GlobalLoading = false;
+        });
+    }
+}

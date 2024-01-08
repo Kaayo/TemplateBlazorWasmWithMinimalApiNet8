@@ -1,0 +1,13 @@
+C:\Users\admin\source\repos\TemplateBlazorWasmHostedNet8\TemplateBlazorWasmHostedNet8.Shared\bin\Debug\net8.0\TemplateBlazorWasmHostedNet8.Shared.deps.json
+C:\Users\admin\source\repos\TemplateBlazorWasmHostedNet8\TemplateBlazorWasmHostedNet8.Shared\bin\Debug\net8.0\TemplateBlazorWasmHostedNet8.Shared.dll
+C:\Users\admin\source\repos\TemplateBlazorWasmHostedNet8\TemplateBlazorWasmHostedNet8.Shared\bin\Debug\net8.0\TemplateBlazorWasmHostedNet8.Shared.pdb
+C:\Users\admin\source\repos\TemplateBlazorWasmHostedNet8\TemplateBlazorWasmHostedNet8.Shared\obj\Debug\net8.0\TemplateBlazorWasmHostedNet8.Shared.csproj.AssemblyReference.cache
+C:\Users\admin\source\repos\TemplateBlazorWasmHostedNet8\TemplateBlazorWasmHostedNet8.Shared\obj\Debug\net8.0\TemplateBlazorWasmHostedNet8.Shared.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\admin\source\repos\TemplateBlazorWasmHostedNet8\TemplateBlazorWasmHostedNet8.Shared\obj\Debug\net8.0\TemplateBlazorWasmHostedNet8.Shared.AssemblyInfoInputs.cache
+C:\Users\admin\source\repos\TemplateBlazorWasmHostedNet8\TemplateBlazorWasmHostedNet8.Shared\obj\Debug\net8.0\TemplateBlazorWasmHostedNet8.Shared.AssemblyInfo.cs
+C:\Users\admin\source\repos\TemplateBlazorWasmHostedNet8\TemplateBlazorWasmHostedNet8.Shared\obj\Debug\net8.0\TemplateBlazorWasmHostedNet8.Shared.csproj.CoreCompileInputs.cache
+C:\Users\admin\source\repos\TemplateBlazorWasmHostedNet8\TemplateBlazorWasmHostedNet8.Shared\obj\Debug\net8.0\TemplateBlazorWasmHostedNet8.Shared.sourcelink.json
+C:\Users\admin\source\repos\TemplateBlazorWasmHostedNet8\TemplateBlazorWasmHostedNet8.Shared\obj\Debug\net8.0\TemplateBlazorWasmHostedNet8.Shared.dll
+C:\Users\admin\source\repos\TemplateBlazorWasmHostedNet8\TemplateBlazorWasmHostedNet8.Shared\obj\Debug\net8.0\refint\TemplateBlazorWasmHostedNet8.Shared.dll
+C:\Users\admin\source\repos\TemplateBlazorWasmHostedNet8\TemplateBlazorWasmHostedNet8.Shared\obj\Debug\net8.0\TemplateBlazorWasmHostedNet8.Shared.pdb
+C:\Users\admin\source\repos\TemplateBlazorWasmHostedNet8\TemplateBlazorWasmHostedNet8.Shared\obj\Debug\net8.0\ref\TemplateBlazorWasmHostedNet8.Shared.dll

@@ -1,0 +1,15 @@
+﻿@attribute [AllowAnonymous]
+
+<CascadingValue Value=this>
+    @ChildContent
+</CascadingValue>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    public void Error(string message)
+    {
+        GlobalSnackBar.Add(message, Severity.Error);
+    }
+}

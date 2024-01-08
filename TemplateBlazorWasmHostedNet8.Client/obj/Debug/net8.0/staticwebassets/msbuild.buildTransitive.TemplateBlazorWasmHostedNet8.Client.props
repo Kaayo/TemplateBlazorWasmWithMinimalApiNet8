@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\TemplateBlazorWasmHostedNet8.Client.props" />
+</Project>

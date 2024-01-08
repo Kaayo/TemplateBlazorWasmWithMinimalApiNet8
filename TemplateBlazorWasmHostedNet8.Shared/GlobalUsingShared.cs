@@ -1,0 +1,9 @@
+﻿global using Microsoft.Extensions.Options;
+global using System.Security.Claims;
+global using System.Security.Cryptography;
+global using System.Text;
+global using TemplateBlazorWasmHostedNet8.Shared.Models.OptionsPattern;
+global using Microsoft.IdentityModel.Tokens;
+global using System.IdentityModel.Tokens.Jwt;
+global using TemplateBlazorWasmHostedNet8.Shared.Enums;
+global using TemplateBlazorWasmHostedNet8.Shared.Dtos;

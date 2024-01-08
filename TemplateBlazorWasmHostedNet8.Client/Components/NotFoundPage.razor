@@ -1,0 +1,10 @@
+﻿@attribute [AllowAnonymous]
+@inject NavigationManager _navigatorManager
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        _navigatorManager.NavigateTo("/");
+        await Task.CompletedTask;
+    }
+}

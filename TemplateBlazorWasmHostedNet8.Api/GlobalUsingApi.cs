@@ -1,0 +1,14 @@
+﻿global using Microsoft.AspNetCore.Authentication.JwtBearer;
+global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.AspNetCore.SignalR;
+global using Microsoft.FeatureManagement;
+global using Microsoft.IdentityModel.Tokens;
+global using System.Text;
+global using TemplateBlazorWasmHostedNet8.Api.Endpoints;
+global using TemplateBlazorWasmHostedNet8.Shared.Dtos;
+global using TemplateBlazorWasmHostedNet8.Shared.Models.OptionsPattern;
+global using TemplateBlazorWasmHostedNet8.Shared.Services;
+global using Microsoft.AspNetCore.ResponseCompression;
+global using TemplateBlazorWasmHostedNet8.Api.Hubs;
+global using TemplateBlazorWasmHostedNet8.Shared.CustomExceptions;
